@@ -17,22 +17,21 @@ class NegociacaoController {
       new MensagemView($('#mensagemView')),
       'texto'
     );
+
+    this._carregaTodasAsNegociacoes();
   }
 
   adiciona(event) {
     event.preventDefault();
 
+    const negociacao = this._criaNegociacao();
     ConnectionFactory.getConnection()
-      .then(conn => {
-        const negociacao = this._criaNegociacao();
-
-        new NegociacaoDAO(conn)
-          .adiciona(negociacao)
-          .then(() => {
-            this._listaNegociacoes.adiciona(negociacao);
-            this._mensagem.texto = 'Negociacao adicionada com sucesso';
-            this._limpaFormulario();
-          });
+      .then(conn => new NegociacaoDAO(conn))
+      .then(dao => dao.adiciona(negociacao))
+      .then(() => {
+          this._listaNegociacoes.adiciona(negociacao);
+          this._mensagem.texto = 'Negociacao adicionada com sucesso';
+          this._limpaFormulario();
       })
       .catch(erro => this._mensagem.texto = erro);
   }
@@ -79,5 +78,13 @@ class NegociacaoController {
     this._inputValor.value = 0.0
 
     this._inputData.focus();
+  }
+
+  _carregaTodasAsNegociacoes() {
+    ConnectionFactory.getConnection()
+      .then(conn => new NegociacaoDAO(conn))
+      .then(dao => dao.listaTodos())
+      .then(negociacoes => negociacoes.forEach(this._listaNegociacoes.adiciona))
+      .catch(erro => this._mensagem.texto = erro);
   }
 }
