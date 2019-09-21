@@ -33,13 +33,19 @@ class NegociacaoController {
           this._mensagem.texto = 'Negociacao adicionada com sucesso';
           this._limpaFormulario();
       })
-      .catch(erro => this._mensagem.texto = erro);
+      .catch(_ => this._mensagem.texto = 'Não foi possível adicionar uma nova negociação.');
   }
 
   apaga() {
-    this._listaNegociacoes.esvazia();
+    ConnectionFactory.getConnection()
+      .then(conn => new NegociacaoDAO(conn))
+      .then(dao => dao.apagaTodos())
+      .then(() => {
+        this._listaNegociacoes.esvazia();
 
-    this._mensagem.texto = 'Negociações apagadas com sucesso';
+        this._mensagem.texto = 'Negociações apagadas com sucesso';
+      })
+      .catch(_ => this._mensagem.texto = 'Não foi possível apagar todas as negociações.');
   }
 
   importaNegociacoes() {
@@ -85,6 +91,6 @@ class NegociacaoController {
       .then(conn => new NegociacaoDAO(conn))
       .then(dao => dao.listaTodos())
       .then(negociacoes => negociacoes.forEach(this._listaNegociacoes.adiciona))
-      .catch(erro => this._mensagem.texto = erro);
+      .catch(_ => this._mensagem.texto = 'Não foi possível listar todas as negociações.');
   }
 }

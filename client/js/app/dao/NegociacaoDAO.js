@@ -52,4 +52,24 @@ class NegociacaoDAO {
       };
     });
   }
+
+  apagaTodos() {
+    return new Promise((resolve, reject) => {
+      const request = this._conn
+        .transaction([this._store], 'readwrite')
+        .objectStore(this._store)
+        .clear();
+
+      request.onsuccess = _ => {
+        resolve();
+      };
+
+      request.onerror = e => {
+        const { error } = e.target;
+
+        console.log(error);
+        reject(error.name);
+      };
+    });
+  }
 }
