@@ -12,7 +12,7 @@ var ConnectionFactory = (() => {
 
     static getConnection() {
       if (openedConnection) {
-        return Promise.resolve(openedConnection);
+        return Promise.resolve(openedConnection.ref);
       }
 
       return new Promise((resolve, reject) => {
@@ -23,7 +23,15 @@ var ConnectionFactory = (() => {
         };
 
         openRequest.onsuccess = e => {
-          resolve(openedConnection = e.target.result);
+          const conn = e.target.result;
+
+          openedConnection = {
+            ref: conn,
+            close: conn.close.bind(conn)
+          };
+
+          conn.close = () => { throw new Error('Não é possível fechar a conexão diretamente.') };
+          resolve(openedConnection.ref);
         };
 
         openRequest.onerror = e => {
@@ -33,6 +41,13 @@ var ConnectionFactory = (() => {
           reject(error.name);
         };
       });
+    }
+
+    static closeConnection() {
+      if (openedConnection) {
+        openedConnection.close();
+        openedConnection = null;
+      }
     }
 
     static _createStores(conn) {
