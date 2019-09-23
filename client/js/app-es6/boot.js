@@ -1,6 +1,6 @@
-import { NegociacaoController } from './controllers/NegociacaoController';
+import { currentInstance } from './controllers/NegociacaoController';
 
-const controller = new NegociacaoController();
+const controller = currentInstance();
 
 document.querySelector('.form').onsubmit = controller.adiciona.bind(controller);
 document.querySelector('#btnApaga').onclick = controller.apaga.bind(controller);

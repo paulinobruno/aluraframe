@@ -7,7 +7,7 @@ import { NegociacaoService } from '../services/NegociacaoService';
 import { MensagemView } from '../views/MensagemView';
 import { NegociacoesView } from '../views/NegociacoesView';
 
-export class NegociacaoController {
+class NegociacaoController {
   constructor() {
     let $ = document.querySelector.bind(document);
     this._inputData = $('#data');
@@ -97,3 +97,7 @@ export class NegociacaoController {
     setInterval(() => this.importaNegociacoes(), 3000);
   }
 }
+
+const controller = new NegociacaoController();
+
+export const currentInstance = () => controller;
