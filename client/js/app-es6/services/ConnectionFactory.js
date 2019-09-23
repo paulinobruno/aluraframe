@@ -1,63 +1,61 @@
-var ConnectionFactory = (() => {
-  const dbName = 'aluraframe';
-  const dbVersion = 3;
-  const stores = ['negociacoes'];
+const dbName = 'aluraframe';
+const dbVersion = 3;
+const stores = ['negociacoes'];
 
-  let openedConnection;
+let openedConnection;
 
-  return class ConnectionFactory {
-    constructor() {
-      throw new Error('Não é possível criar instâncias de ConnectionFactory');
+export class ConnectionFactory {
+  constructor() {
+    throw new Error('Não é possível criar instâncias de ConnectionFactory');
+  }
+
+  static getConnection() {
+    if (openedConnection) {
+      return Promise.resolve(openedConnection.ref);
     }
 
-    static getConnection() {
-      if (openedConnection) {
-        return Promise.resolve(openedConnection.ref);
-      }
+    return new Promise((resolve, reject) => {
+      let openRequest = window.indexedDB.open(dbName, dbVersion);
 
-      return new Promise((resolve, reject) => {
-        let openRequest = window.indexedDB.open(dbName, dbVersion);
+      openRequest.onupgradeneeded = e => {
+        ConnectionFactory._createStores(e.target.result);
+      };
 
-        openRequest.onupgradeneeded = e => {
-          ConnectionFactory._createStores(e.target.result);
+      openRequest.onsuccess = e => {
+        const conn = e.target.result;
+
+        openedConnection = {
+          ref: conn,
+          close: conn.close.bind(conn)
         };
 
-        openRequest.onsuccess = e => {
-          const conn = e.target.result;
+        conn.close = () => { throw new Error('Não é possível fechar a conexão diretamente.') };
+        resolve(openedConnection.ref);
+      };
 
-          openedConnection = {
-            ref: conn,
-            close: conn.close.bind(conn)
-          };
+      openRequest.onerror = e => {
+        const { error } = e.target;
 
-          conn.close = () => { throw new Error('Não é possível fechar a conexão diretamente.') };
-          resolve(openedConnection.ref);
-        };
+        console.log('Erro ao tentar obter conexão com o IndexedDB.', error);
+        reject(error.name);
+      };
+    });
+  }
 
-        openRequest.onerror = e => {
-          const { error } = e.target;
-
-          console.log('Erro ao tentar obter conexão com o IndexedDB.', error);
-          reject(error.name);
-        };
-      });
-    }
-
-    static closeConnection() {
-      if (openedConnection) {
-        openedConnection.close();
-        openedConnection = null;
-      }
-    }
-
-    static _createStores(conn) {
-      stores.forEach(name => {
-        if (conn.objectStoreNames.contains(name)) {
-          conn.deleteObjectStore(name);
-        }
-
-        conn.createObjectStore(name, { autoIncrement: true });
-      });
+  static closeConnection() {
+    if (openedConnection) {
+      openedConnection.close();
+      openedConnection = null;
     }
   }
-})();
+
+  static _createStores(conn) {
+    stores.forEach(name => {
+      if (conn.objectStoreNames.contains(name)) {
+        conn.deleteObjectStore(name);
+      }
+
+      conn.createObjectStore(name, { autoIncrement: true });
+    });
+  }
+}
