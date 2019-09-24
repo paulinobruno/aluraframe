@@ -1,7 +1,10 @@
 const path = require('path');
 const BabiliPlugin = require('babili-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const plugins = [];
+const plugins = [
+  new ExtractTextPlugin('styles.css')
+];
 
 if (process.env.NODE_ENV === 'production') {
   plugins.push(new BabiliPlugin());
@@ -25,7 +28,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        }),
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
