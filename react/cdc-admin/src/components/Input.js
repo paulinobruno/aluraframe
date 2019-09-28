@@ -21,8 +21,12 @@ export default class Input extends Component {
   }
 
   componentDidMount() {
-    PubSub.subscribe('erro-validacao', (_, { defaultMessage: msgErro }) =>
-      this.setState({ msgErro })
-    );
+    PubSub.subscribe('erro-validacao', (_, { field, defaultMessage: msgErro }) => {
+      if (field === this.props.name) {
+        this.setState({ msgErro });
+      }
+    });
+
+    PubSub.subscribe('limpa-erros', () => this.setState({ msgErro: '' }));
   }
 }

@@ -70,11 +70,18 @@ class Formulario extends Component {
       .then(_handleHttpErrors)
       .then(response => response.json())
       .then(lista => PubSub.publish('atualiza-lista-autores', lista))
+      .then(() => this.setState({
+        nome: '',
+        email: '',
+        senha: ''
+      }))
       .catch(err => {
         if (err.status === 400) {
           new TratadorErros().publicaErros(err.body);
         }
       });
+
+    PubSub.publish("limpa-erros");
   }
 
   setValue(event) {
