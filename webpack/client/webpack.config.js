@@ -1,6 +1,7 @@
 const path = require('path');
 const BabiliPlugin = require('babili-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetPlugin = require('optimize-css-assets-webpack-plugin');
 
 const plugins = [
   new ExtractTextPlugin('styles.css')
@@ -8,6 +9,13 @@ const plugins = [
 
 if (process.env.NODE_ENV === 'production') {
   plugins.push(new BabiliPlugin());
+  plugins.push(new OptimizeCssAssetPlugin({
+    cssProcessor: require('cssnano'),
+    cssProcessorOptions: {
+      discardComments: { removeAll: true }
+    },
+    canPrint: true
+  }));
 }
 
 module.exports = {
