@@ -10,22 +10,7 @@ const _handleHttpErrors = res => {
   return res;
 }
 
-export class Lista extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      lista: [],
-    };
-  }
-
-  componentDidMount() {
-    fetch('http://localhost:8080/api/autores')
-      .then(_handleHttpErrors)
-      .then(response => response.json())
-      .then(lista => this.setState({ lista }));
-  }
-
+class Lista extends Component {
   render() {
     return (
       <div>
@@ -37,7 +22,7 @@ export class Lista extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.lista.map(item =>
+            {this.props.lista.map(item =>
               <tr key={item.id}>
                 <td>{item.nome}</td>
                 <td>{item.email}</td>
@@ -50,7 +35,7 @@ export class Lista extends Component {
   }
 }
 
-export class Formulario extends Component {
+class Formulario extends Component {
   constructor() {
     super();
 
@@ -76,7 +61,7 @@ export class Formulario extends Component {
     })
       .then(_handleHttpErrors)
       .then(response => response.json())
-      .then(lista => this.setState({ lista }))
+      .then(this.props.onAfterSave)
       .catch(x => console.error('erro', x));
   }
 
@@ -94,6 +79,38 @@ export class Formulario extends Component {
           <Input label="Senha" id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
           <Button label="Gravar" />
         </form>
+      </div>
+    );
+  }
+}
+
+export default class AutorBox extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      lista: [],
+    };
+
+    this.atualizaLista = this.atualizaLista.bind(this);
+  }
+
+  atualizaLista(lista) {
+    this.setState({ lista });
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:8080/api/autores')
+      .then(_handleHttpErrors)
+      .then(response => response.json())
+      .then(lista => this.setState({ lista }));
+  }
+
+  render() {
+    return (
+      <div>
+        <Formulario onAfterSave={this.atualizaLista} />
+        <Lista lista={this.state.lista}/>
       </div>
     );
   }

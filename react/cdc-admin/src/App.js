@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Lista, Formulario } from './Autor';
+import AutorBox from './Autor';
 import './css/pure-min.css';
 import './css/side-menu.css';
-
 
 class App extends Component {
   render() {
@@ -30,8 +29,7 @@ class App extends Component {
           </div>
 
           <div className="content" id="content">
-            <Formulario />
-            <Lista />
+            <AutorBox />
           </div>
         </div>
       </div>
