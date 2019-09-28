@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Input from './components/Input';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
@@ -81,18 +82,9 @@ class App extends Component {
 
             <div className="pure-form pure-form-aligned">
               <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
-                <div className="pure-control-group">
-                  <label htmlFor="nome">Nome</label>
-                  <input id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
-                </div>
-                <div className="pure-control-group">
-                  <label htmlFor="email">Email</label>
-                  <input id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
-                </div>
-                <div className="pure-control-group">
-                  <label htmlFor="senha">Senha</label>
-                  <input id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
-                </div>
+                <Input label="Nome" id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
+                <Input label="E-mail" id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
+                <Input label="Senha" id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
                 <div className="pure-control-group">
                   <label></label>
                   <button type="submit" className="pure-button pure-button-primary">Gravar</button>
