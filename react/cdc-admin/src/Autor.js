@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PubSub from 'pubsub-js';
 import Input from './components/Input';
 import Button from './components/Button';
 
@@ -61,7 +62,7 @@ class Formulario extends Component {
     })
       .then(_handleHttpErrors)
       .then(response => response.json())
-      .then(this.props.onAfterSave)
+      .then(lista => PubSub.publish('atualiza-lista-autores', lista))
       .catch(x => console.error('erro', x));
   }
 
@@ -91,12 +92,6 @@ export default class AutorBox extends Component {
     this.state = {
       lista: [],
     };
-
-    this.atualizaLista = this.atualizaLista.bind(this);
-  }
-
-  atualizaLista(lista) {
-    this.setState({ lista });
   }
 
   componentDidMount() {
@@ -104,12 +99,14 @@ export default class AutorBox extends Component {
       .then(_handleHttpErrors)
       .then(response => response.json())
       .then(lista => this.setState({ lista }));
+
+    PubSub.subscribe('atualiza-lista-autores', (topico, lista) => this.setState({ lista }));
   }
 
   render() {
     return (
       <div>
-        <Formulario onAfterSave={this.atualizaLista} />
+        <Formulario />
         <Lista lista={this.state.lista}/>
       </div>
     );
