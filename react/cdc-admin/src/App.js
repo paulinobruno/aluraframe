@@ -12,7 +12,7 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     $.get('http://localhost:8080/api/autores')
       .then(lista => this.setState({ lista }));
   }
@@ -73,10 +73,12 @@ class App extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.lista.map(item => <tr>
-                    <td>{item.nome}</td>
-                    <td>{item.email}</td>
-                  </tr>)}
+                  {this.state.lista.map(item =>
+                    <tr key={item.id}>
+                      <td>{item.nome}</td>
+                      <td>{item.email}</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
