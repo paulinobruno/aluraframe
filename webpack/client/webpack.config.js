@@ -27,7 +27,10 @@ const plugins = [
   }),
 ];
 
+let SERVICE_URL = JSON.stringify('http://localhost:3000');
 if (process.env.NODE_ENV === 'production') {
+  SERVICE_URL = JSON.stringify('http://api.paulinobruno.com');
+
   plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
   plugins.push(new BabiliPlugin());
   plugins.push(new OptimizeCssAssetPlugin({
@@ -38,6 +41,8 @@ if (process.env.NODE_ENV === 'production') {
     canPrint: true
   }));
 }
+
+plugins.push(new webpack.DefinePlugin({ SERVICE_URL }));
 
 module.exports = {
   entry: {
