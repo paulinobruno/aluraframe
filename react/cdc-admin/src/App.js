@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Input from './components/Input';
+import Button from './components/Button';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
@@ -85,10 +86,7 @@ class App extends Component {
                 <Input label="Nome" id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
                 <Input label="E-mail" id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
                 <Input label="Senha" id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
-                <div className="pure-control-group">
-                  <label></label>
-                  <button type="submit" className="pure-button pure-button-primary">Gravar</button>
-                </div>
+                <Button label="Gravar" />
               </form>
             </div>
 
