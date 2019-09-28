@@ -16,7 +16,13 @@ class App extends Component {
 
     this.state = {
       lista: [],
+      nome: '',
+      email: '',
+      senha: ''
     };
+
+    this.enviaForm = this.enviaForm.bind(this);
+    this.setValue = this.setValue.bind(this);
   }
 
   componentDidMount() {
@@ -29,14 +35,21 @@ class App extends Component {
   enviaForm(event) {
     event.preventDefault();
 
+    const { nome, email, senha } = this.state;
+
     fetch('http://localhost:8080/api/autores', {
       headers: { 'Content-Type': 'application/json' },
       method: 'post',
-      body: JSON.stringify({})
+      body: JSON.stringify({ nome, email, senha })
     })
       .then(_handleHttpErrors)
       .then(x => console.log('sucesso', x))
       .catch(x => console.error('erro', x));
+  }
+
+  setValue(event) {
+    const { id: fieldName, value } = event.target;
+    this.setState({ [fieldName]: value });
   }
 
   render() {
@@ -69,15 +82,15 @@ class App extends Component {
               <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
                 <div className="pure-control-group">
                   <label htmlFor="nome">Nome</label>
-                  <input id="nome" type="text" name="nome" />
+                  <input id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
                 </div>
                 <div className="pure-control-group">
                   <label htmlFor="email">Email</label>
-                  <input id="email" type="email" name="email" />
+                  <input id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
                 </div>
                 <div className="pure-control-group">
                   <label htmlFor="senha">Senha</label>
-                  <input id="senha" type="password" name="senha" />
+                  <input id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
                 </div>
                 <div className="pure-control-group">
                   <label></label>
