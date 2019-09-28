@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
@@ -13,7 +12,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    $.get('http://localhost:8080/api/autores')
+    fetch('http://localhost:8080/api/autores')
+      .then(response => response.json())
       .then(lista => this.setState({ lista }));
   }
 
