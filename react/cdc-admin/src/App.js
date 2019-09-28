@@ -26,12 +26,12 @@ class App extends Component {
 
         <div id="menu">
           <div className="pure-menu">
-            <a className="pure-menu-heading" href="#">paulinobruno</a>
+            <a className="pure-menu-heading" href="#company">paulinobruno</a>
 
             <ul className="pure-menu-list">
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Home</a></li>
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Autor</a></li>
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Livro</a></li>
+              <li className="pure-menu-item"><a href="#home" className="pure-menu-link">Home</a></li>
+              <li className="pure-menu-item"><a href="#autor" className="pure-menu-link">Autor</a></li>
+              <li className="pure-menu-item"><a href="#livro" className="pure-menu-link">Livro</a></li>
             </ul>
           </div>
         </div>
@@ -47,11 +47,11 @@ class App extends Component {
               <form className="pure-form pure-form-aligned">
                 <div className="pure-control-group">
                   <label htmlFor="nome">Nome</label>
-                  <input id="nome" type="text" name="nome" value="" />
+                  <input id="nome" type="text" name="nome" />
                 </div>
                 <div className="pure-control-group">
                   <label htmlFor="email">Email</label>
-                  <input id="email" type="email" name="email" value="" />
+                  <input id="email" type="email" name="email" />
                 </div>
                 <div className="pure-control-group">
                   <label htmlFor="senha">Senha</label>
