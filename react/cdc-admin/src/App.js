@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
+const _handleHttpErrors = res => {
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  return res;
+}
+
 class App extends Component {
   constructor() {
     super();
@@ -13,8 +21,22 @@ class App extends Component {
 
   componentDidMount() {
     fetch('http://localhost:8080/api/autores')
+      .then(_handleHttpErrors)
       .then(response => response.json())
       .then(lista => this.setState({ lista }));
+  }
+
+  enviaForm(event) {
+    event.preventDefault();
+
+    fetch('http://localhost:8080/api/autores', {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'post',
+      body: JSON.stringify({})
+    })
+      .then(_handleHttpErrors)
+      .then(x => console.log('sucesso', x))
+      .catch(x => console.error('erro', x));
   }
 
   render() {
@@ -44,7 +66,7 @@ class App extends Component {
           <div className="content" id="content">
 
             <div className="pure-form pure-form-aligned">
-              <form className="pure-form pure-form-aligned">
+              <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
                 <div className="pure-control-group">
                   <label htmlFor="nome">Nome</label>
                   <input id="nome" type="text" name="nome" />
