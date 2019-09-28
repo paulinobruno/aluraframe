@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
@@ -7,10 +8,13 @@ class App extends Component {
     super();
 
     this.state = {
-      lista: [
-        { nome: 'Bruno', email: 'paulino.bruno@gmail.com', senha: '123456', },
-      ],
+      lista: [],
     };
+  }
+
+  componentWillMount() {
+    $.get('http://localhost:8080/api/autores')
+      .then(lista => this.setState({ lista }));
   }
 
   render() {
