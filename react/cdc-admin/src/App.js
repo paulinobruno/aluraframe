@@ -43,7 +43,8 @@ class App extends Component {
       body: JSON.stringify({ nome, email, senha })
     })
       .then(_handleHttpErrors)
-      .then(x => console.log('sucesso', x))
+      .then(response => response.json())
+      .then(lista => this.setState({ lista }))
       .catch(x => console.error('erro', x));
   }
 
