@@ -3,17 +3,28 @@ const webpack = require('webpack');
 const BabiliPlugin = require('babili-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const plugins = [
+  new HtmlWebpackPlugin({
+    hash: true,
+    minify: {
+      html5: true,
+      collapseWhitespace: true,
+      removeComments: true,
+    },
+    filename: 'index.html',
+    template: __dirname + '/main.html'
+  }),
   new ExtractTextPlugin('styles.css'),
   new webpack.ProvidePlugin({
     '$': 'jquery/dist/jquery',
-    'jQuery': 'jquery/dist/jquery'
+    'jQuery': 'jquery/dist/jquery',
   }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
-    filename: 'vendor.bundle.js'
-  })
+    filename: 'vendor.bundle.js',
+  }),
 ];
 
 if (process.env.NODE_ENV === 'production') {
@@ -31,12 +42,11 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   entry: {
     app: './app-src/app.js',
-    vendor: ['jquery', 'bootstrap', 'reflect-metadata']
+    vendor: ['jquery', 'bootstrap', 'reflect-metadata'],
   },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'dist'
   },
   module: {
     rules: [
