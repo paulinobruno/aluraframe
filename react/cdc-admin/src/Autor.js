@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
 import Input from './components/Input';
 import Button from './components/Button';
+import TratadorErros from './TratadorErros';
 
 const _handleHttpErrors = res => {
   if (!res.ok) {
-    throw new Error(res.statusText);
+    return res.json().then(body => {
+      const err = new Error(res.statusText);
+      err.status = res.status;
+      err.body = body;
+      err.rawResponse = res;
+      throw err;
+    });
   }
 
   return res;
@@ -63,7 +70,11 @@ class Formulario extends Component {
       .then(_handleHttpErrors)
       .then(response => response.json())
       .then(lista => PubSub.publish('atualiza-lista-autores', lista))
-      .catch(x => console.error('erro', x));
+      .catch(err => {
+        if (err.status === 400) {
+          new TratadorErros().publicaErros(err.body);
+        }
+      });
   }
 
   setValue(event) {
