@@ -126,6 +126,8 @@ export default class LivroBox extends Component {
 
     Promise.all(promises)
       .then(([autores, livros]) => this.setState({ autores, livros }));
+
+    PubSub.subscribe('atualiza-lista-livros', (topico, livros) => this.setState({ livros }));
   }
 
   render() {
