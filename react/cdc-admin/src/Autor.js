@@ -91,20 +91,13 @@ class Formulario extends Component {
 
   render() {
     return (
-      <div>
-        <div className="header">
-          <h1>Cadastro de Autores</h1>
-        </div>
-        <div className="content" id="content">
-          <div className="pure-form pure-form-aligned">
-            <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
-              <Input label="Nome" id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
-              <Input label="E-mail" id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
-              <Input label="Senha" id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
-              <Button label="Gravar" />
-            </form>
-          </div>
-        </div>
+      <div className="pure-form pure-form-aligned">
+        <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
+          <Input label="Nome" id="nome" type="text" name="nome" value={this.state.nome} onChange={this.setValue} />
+          <Input label="E-mail" id="email" type="email" name="email" value={this.state.email} onChange={this.setValue} />
+          <Input label="Senha" id="senha" type="password" name="senha" value={this.state.senha} onChange={this.setValue} />
+          <Button label="Gravar" />
+        </form>
       </div>
     );
   }
@@ -131,8 +124,13 @@ export default class AutorBox extends Component {
   render() {
     return (
       <div>
-        <Formulario />
-        <Lista lista={this.state.lista}/>
+        <div className="header">
+          <h1>Cadastro de Autores</h1>
+        </div>
+        <div className="content" id="content">
+          <Formulario />
+          <Lista lista={this.state.lista} />
+        </div>
       </div>
     );
   }
