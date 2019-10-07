@@ -19,12 +19,11 @@ const _handleHttpErrors = res => {
   return res;
 }
 
-export default class LivroBox extends Component {
+class Formulario extends Component {
   constructor() {
     super();
 
     this.state = {
-      autores: [],
       titulo: '',
       preco: '',
       autorId: '',
@@ -64,29 +63,80 @@ export default class LivroBox extends Component {
     this.setState({ [fieldName]: value });
   }
 
+  render() {
+    return (
+      <div className="pure-form pure-form-aligned">
+        <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
+          <Input label="Titulo" id="titulo" type="text" name="titulo" value={this.state.titulo} onChange={this.setValue} />
+          <Input label="Preço" id="preco" type="number" name="preco" value={this.state.preco} onChange={this.setValue} />
+          <Select label="Autor" options={this.props.autores} id="autorId" name="autorId"
+            value={this.state.autorId} onChange={this.setValue} />
+          <Button label="Gravar" />
+        </form>
+      </div>
+    );
+  }
+}
+
+class Lista extends Component {
+  render() {
+    return (
+      <div>
+        <table className="pure-table">
+          <thead>
+            <tr>
+              <th>Autor</th>
+              <th>Título</th>
+              <th>Preço</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.lista.map(item =>
+              <tr key={item.id}>
+                <td>{item.autor.nome}</td>
+                <td>{item.titulo}</td>
+                <td>{item.preco}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+export default class LivroBox extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      autores: [],
+      livros: [],
+    };
+  }
+
   componentDidMount() {
-    fetch('http://localhost:8080/api/autores')
-      .then(_handleHttpErrors)
-      .then(response => response.json())
-      .then(autores => this.setState({ autores }));
+    const promises = [
+      fetch('http://localhost:8080/api/autores'),
+      fetch('http://localhost:8080/api/livros')
+    ].map(p =>
+      p.then(_handleHttpErrors)
+        .then(response => response.json())
+    );
+
+    Promise.all(promises)
+      .then(([autores, livros]) => this.setState({ autores, livros }));
   }
 
   render() {
-    return(
+    return (
       <div>
         <div className="header">
           <h1>Cadastro de Livros</h1>
         </div>
         <div className="content" id="content">
-          <div className="pure-form pure-form-aligned">
-            <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
-              <Input label="Titulo" id="titulo" type="text" name="titulo" value={this.state.titulo} onChange={this.setValue} />
-              <Input label="Preço" id="preco" type="number" name="preco" value={this.state.preco} onChange={this.setValue} />
-              <Select label="Autor" options={this.state.autores} id="autorId" name="autorId"
-                value={this.state.autorId} onChange={this.setValue} />
-              <Button label="Gravar" />
-            </form>
-          </div>
+          <Formulario autores={this.state.autores} />
+          <Lista lista={this.state.livros} />
         </div>
       </div>
     );
