@@ -6,7 +6,7 @@ import AutorBox from './Autor';
 import LivroBox from './Livro';
 import Home from './Home';
 import { BrowserRouter, Route } from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render((

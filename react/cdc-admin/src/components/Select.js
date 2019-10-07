@@ -13,12 +13,12 @@ export default class Select extends Component {
   render() {
     return (
       <div className="pure-control-group">
-        <label for={this.props.id}>{this.props.label}</label>
+        <label htmlFor={this.props.id}>{this.props.label}</label>
         <select id={this.props.id} name={this.props.name} value={this.props.value} onChange={this.props.onChange}>
           <option value="">Selectione...</option>
           {
             this.props.options.map(({ id, nome }) =>
-              <option value={id}>{nome}</option>
+              <option value={id} key={id}>{nome}</option>
             )
           }
         </select>

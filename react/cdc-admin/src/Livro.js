@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import PubSub from 'pubsub-js';
 import Input from './components/Input';
 import Button from './components/Button';
 import Select from './components/Select';
+import TratadorErros from './TratadorErros';
 
 const _handleHttpErrors = res => {
   if (!res.ok) {
@@ -24,7 +26,7 @@ export default class LivroBox extends Component {
     this.state = {
       autores: [],
       titulo: '',
-      preco: 0,
+      preco: '',
       autorId: '',
     };
 
@@ -34,6 +36,27 @@ export default class LivroBox extends Component {
 
   enviaForm(event) {
     event.preventDefault();
+
+    const { titulo, preco, autorId } = this.state;
+
+    fetch('http://localhost:8080/api/livros', {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'post',
+      body: JSON.stringify({ titulo, preco, autorId })
+    })
+      .then(_handleHttpErrors)
+      .then(response => response.json())
+      .then(lista => PubSub.publish('atualiza-lista-livros', lista))
+      .then(() => this.setState({
+        titulo: '',
+        preco: '',
+        autorId: '',
+      }))
+      .catch(err => {
+        if (err.status === 400) {
+          new TratadorErros().publicaErros(err.body);
+        }
+      });
   }
 
   setValue(event) {
