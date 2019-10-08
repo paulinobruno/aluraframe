@@ -14,7 +14,7 @@ export default class Select extends Component {
     return (
       <div className="pure-control-group">
         <label htmlFor={this.props.id}>{this.props.label}</label>
-        <select id={this.props.id} name={this.props.name} value={this.props.value} onChange={this.props.onChange}>
+        <select {...this.props}>
           <option value="">Selectione...</option>
           {
             this.props.options.map(({ id, nome }) =>

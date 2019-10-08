@@ -13,8 +13,7 @@ export default class Input extends Component {
     return (
       <div className="pure-control-group">
         <label htmlFor={this.props.id}>{this.props.label}</label>
-        <input id={this.props.id} type={this.props.type} name={this.props.name}
-          value={this.props.value} onChange={this.props.onChange} />
+        <input {...this.props}/>
         <span className="erro">{this.state.msgErro}</span>
       </div>
     );
