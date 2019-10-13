@@ -150,8 +150,15 @@ body {
   display: inline-block;
 }
 
+.foto-info-likes span {
+  margin-left: 0.5em;
+}
+
 .foto-info-autor {
+  text-decoration: none;
+  color: #069;
   font-weight: bold;
+  margin-right: 0.5em;
 }
 
 

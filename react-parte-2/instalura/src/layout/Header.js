@@ -16,7 +16,7 @@ export default function Header() {
       <nav>
         <ul className="header-nav">
           <li className="header-nav-item">
-            <a href="#">
+            <a href="#header">
               ♡
                   { /*                  ♥ */}
               { /* Quem deu like nas minhas fotos? */}
