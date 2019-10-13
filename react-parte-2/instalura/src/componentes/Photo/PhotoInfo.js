@@ -1,31 +1,32 @@
 import React from 'react';
 
-export default () => (
+export default ({ id, loginUsuario, comentario, likers, comentarios }) => (
   <div className="foto-info">
     <div className="foto-info-likes">
-      <a href="#photoInfo#1">alots_ssa</a>,
-      <a href="#photoInfo#2">rafael_rollo</a>
-      <span>curtiram</span>
+      {
+        likers.map(liker => {
+          const hash = `#${id}#${liker.login}`;
+
+          return <a key={hash} href={hash}>{liker.login},</a>;
+        })
+      }
+      <span>{likers.length > 1 ? 'curtiram' : 'curtiu'}</span>
     </div>
 
     <p className="foto-info-legenda">
-      <a className="foto-info-autor" href="#photoInfo#3">autor</a>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est, illo?
+      <a className="foto-info-autor" href="#photoInfo#3">{loginUsuario}</a>
+      {comentario}
     </p>
 
     <ul className="foto-info-comentarios">
-      <li className="comentario">
-        <a className="foto-info-autor" href="#photoInfo#4">seguidor</a>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem ad, molestiae.
-      </li>
-      <li className="comentario">
-        <a className="foto-info-autor" href="#photoInfo#5">seguidor</a>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt cumque earum molestias voluptatem modi nihil sit magnam ratione eveniet distinctio magni error asperiores dignissimos tempora expedita, laborum ex soluta hic maiores veritatis deserunt.
-      </li>
-      <li className="comentario">
-        <a className="foto-info-autor" href="#photoInfo#6">seguidor</a>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum laudantium quae ab fuga odio delectus maiores voluptatibus sit commodi quidem.
-      </li>
+      {
+        comentarios.map(comentario =>
+          <li className="comentario" key={`foto_${id}_comentario_${comentario.id}`}>
+            <a className="foto-info-autor" href="#photoInfo#4">{comentario.login}</a>
+            {comentario.texto}
+          </li>
+        )
+      }
     </ul>
   </div>
 );

@@ -20,7 +20,7 @@ export default class Timeline extends Component {
       <div className="fotos container">
         {
           this.state.photos.map(p =>
-            (<Photo data={p}></Photo>)
+            (<Photo key={p.id} data={p}></Photo>)
           )
         }
       </div>
