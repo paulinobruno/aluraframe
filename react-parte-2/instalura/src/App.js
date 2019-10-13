@@ -8,7 +8,7 @@ function App() {
       <div className="main">
         <Header />
         <Timeline />
-      </div> {/* fim .main */}
+      </div>
     </div>
   );
 }
