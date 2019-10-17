@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
+import { useHistory } from "react-router-dom";
 
-export default class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      msg: ''
-    };
-  }
+export default function Login() {
+  const history = useHistory();
+  const [ msg, setMsg ] = useState('');
+  const username = useRef();
+  const password = useRef();
 
-  envia(event) {
+  function envia(event) {
     event.preventDefault();
 
     fetch('http://localhost:8080/api/public/login', {
       method: 'POST',
       body: JSON.stringify({
-        login: this.username.value,
-        senha: this.password.value
+        login: username.current.value,
+        senha: password.current.value
       }),
       headers: {
         'Content-Type': 'application/json'
@@ -28,21 +27,22 @@ export default class Login extends Component {
           throw new Error('Não foi possível autenticar')
         }
       })
-      .then(token => console.log(token))
-      .catch(err => this.setState({ msg: err.message }));
+      .then(token => {
+        localStorage.setItem('auth-token', token);
+        history.push('/timeline');
+      })
+      .catch(err => setMsg(err.message));
   }
 
-  render() {
-    return (
-      <div className="login-box">
-        <h1 className="header-logo">Instalura</h1>
-        {!!this.state.msg && <span>{this.state.msg}</span>}
-        <form onSubmit={this.envia.bind(this)}>
-          <input type="text" ref={input => this.username = input}/>
-          <input type="password" ref={input => this.password = input}/>
-          <input type="submit" value="login" />
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className="login-box">
+      <h1 className="header-logo">Instalura</h1>
+      {!!msg && <span>{msg}</span>}
+      <form onSubmit={envia}>
+        <input type="text" ref={username} />
+        <input type="password" ref={password} />
+        <input type="submit" value="login" />
+      </form>
+    </div>
+  );
 }
