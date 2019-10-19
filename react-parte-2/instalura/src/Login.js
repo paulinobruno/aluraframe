@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useHistory } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ location }) {
   const history = useHistory();
-  const [ msg, setMsg ] = useState('');
+  const [msg, setMsg] = useState((location.state || {}).msg || '');
   const username = useRef();
   const password = useRef();
 
