@@ -2,30 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Login from './Login';
+import { checkAuth, performLogout } from './security/Authentication';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './css/normalize.min.css';
 import './css/timeline.css';
 import './css/login.css';
 import * as serviceWorker from './serviceWorker';
 
-const checkAuth = ({history}) => {
-  if (!localStorage.getItem('auth-token')) {
-    history.push({
-      pathname: '/',
-      state: {
-        msg: 'Você precisa estar logado'
-      }
-    });
-  } else {
-    return <App />;
-  }
-}
-
 ReactDOM.render((
   <BrowserRouter>
     <div>
       <Route exact path="/" component={Login} />
-      <Route path="/timeline" render={checkAuth} />
+      <Route path="/timeline" render={checkAuth(App)} />
+      <Route path="/logout" render={performLogout} />
     </div>
   </BrowserRouter>
 ), document.getElementById('root'));

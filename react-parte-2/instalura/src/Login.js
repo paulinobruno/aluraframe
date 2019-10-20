@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
+import { store } from './security/TokenStore';
 
 export default function Login({ location }) {
   const history = useHistory();
@@ -28,7 +29,7 @@ export default function Login({ location }) {
         }
       })
       .then(token => {
-        localStorage.setItem('auth-token', token);
+        store.setValue(token);
         history.push('/timeline');
       })
       .catch(err => setMsg(err.message));

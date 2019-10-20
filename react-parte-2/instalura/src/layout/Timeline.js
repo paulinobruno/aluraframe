@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Photo from '../componentes/Photo';
+import { store } from '../security/TokenStore';
 
 export default class Timeline extends Component {
   constructor() {
@@ -10,8 +11,7 @@ export default class Timeline extends Component {
   }
 
   componentDidMount() {
-    const authToken = localStorage.getItem('auth-token');
-    const authParam = `X-AUTH-TOKEN=${authToken}`;
+    const authParam = `X-AUTH-TOKEN=${store.getValue()}`;
     fetch(`http://localhost:8080/api/fotos?${authParam}`)
       .then(resp => resp.json())
       .then(photos => this.setState({ photos }));
