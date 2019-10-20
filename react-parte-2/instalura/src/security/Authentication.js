@@ -3,8 +3,9 @@ import { store } from './TokenStore';
 
 export const checkAuth = TargetComponent =>
   ({ history, match }) => {
-    const accessToUserPublicTimeline = !!match.params.user;
-    if (!accessToUserPublicTimeline && !store.isDefined()) {
+    const { params } = match;
+
+    if (!params.user && !store.isDefined()) {
       history.push({
         pathname: '/',
         state: {
@@ -12,7 +13,7 @@ export const checkAuth = TargetComponent =>
         }
       });
     } else {
-      return <TargetComponent />;
+      return <TargetComponent params={{ ...params }} />;
     }
   };
 

@@ -12,7 +12,14 @@ export default class Timeline extends Component {
 
   componentDidMount() {
     const authParam = `X-AUTH-TOKEN=${store.getValue()}`;
-    fetch(`http://localhost:8080/api/fotos?${authParam}`)
+    let timelineUrl = 'http://localhost:8080/api/fotos';
+
+    const { user } = this.props;
+    if (user !== undefined) {
+      timelineUrl = `http://localhost:8080/api/public/fotos/${user}`;
+    }
+
+    fetch(`${timelineUrl}?${authParam}`)
       .then(resp => resp.json())
       .then(photos => this.setState({ photos }));
   }

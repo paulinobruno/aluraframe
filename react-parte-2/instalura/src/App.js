@@ -2,12 +2,12 @@ import React from 'react';
 import Header from './layout/Header';
 import Timeline from './layout/Timeline';
 
-function App() {
+function App({ params: { user } }) {
   return (
     <div id="root">
       <div className="main">
         <Header />
-        <Timeline />
+        <Timeline user={user} />
       </div>
     </div>
   );
