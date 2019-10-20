@@ -1,5 +1,5 @@
 #!/bin/zsh
-JAVA=/Users/paulinobruno/.sdkman/candidates/java/8.0.222-zulu/bin/java
+JAVA=$HOME/.sdkman/candidates/java/8.0.232-zulu/bin/java
 DIR=server
 
 docker-compose -f $DIR/docker-compose.yml up & sleep 5

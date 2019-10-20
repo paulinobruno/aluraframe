@@ -16,8 +16,4 @@ services:
       - "3306:3306"
 
 volumes:
-  m2repo:
-    external: true
-  ivy2:
-    external: true
   store:
