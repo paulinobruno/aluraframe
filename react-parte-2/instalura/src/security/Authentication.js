@@ -2,8 +2,9 @@ import React from 'react';
 import { store } from './TokenStore';
 
 export const checkAuth = TargetComponent =>
-  ({ history }) => {
-    if (!store.isDefined()) {
+  ({ history, match }) => {
+    const accessToUserPublicTimeline = !!match.params.user;
+    if (!accessToUserPublicTimeline && !store.isDefined()) {
       history.push({
         pathname: '/',
         state: {

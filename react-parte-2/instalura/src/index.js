@@ -13,7 +13,7 @@ ReactDOM.render((
   <BrowserRouter>
     <div>
       <Route exact path="/" component={Login} />
-      <Route path="/timeline" render={checkAuth(App)} />
+      <Route path="/timeline/:user?" render={checkAuth(App)} />
       <Route path="/logout" render={performLogout} />
     </div>
   </BrowserRouter>
