@@ -75,6 +75,7 @@ body {
   text-decoration: none;
   color: #069;
   font-size: 3em;
+  margin: auto 2pt;
 }
 
 .header-nav-item a:hover{

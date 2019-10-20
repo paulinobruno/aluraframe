@@ -17,5 +17,10 @@ export const checkAuth = TargetComponent =>
 
 export const performLogout = ({ history }) => {
   store.dropValue();
-  history.push('/');
+  history.push({
+    pathname: '/',
+    state: {
+      msg: 'Você foi deslogado'
+    }
+  });
 };

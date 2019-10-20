@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   return (
@@ -16,11 +17,8 @@ export default function Header() {
       <nav>
         <ul className="header-nav">
           <li className="header-nav-item">
-            <a href="#header">
-              ♡
-                  { /*                  ♥ */}
-              { /* Quem deu like nas minhas fotos? */}
-            </a>
+            <a href="#header">♡</a>
+            <Link to="/logout">⎋</Link>
           </li>
         </ul>
       </nav>
