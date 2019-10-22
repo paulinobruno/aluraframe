@@ -25,11 +25,12 @@ export default ({ id, loginUsuario, comentario, likers: initLikers, comentarios 
     <div className="foto-info">
       <div className="foto-info-likes">
         {
-          likers.map(({ login }) =>
-            <UserLink toUser={login} key={`#${id}#${login}`} />
+          likers.map(({ login }, index) =>
+            <UserLinkWrapper login={login} key={`#${id}#${login}`}
+              hasNext={index < (likers.length - 1)} />
           )
         }
-        <span>{likers.length > 1 ? 'curtiram' : 'curtiu'}</span>
+        {!!likers.length && <span>{likers.length > 1 ? 'curtiram' : 'curtiu'}</span>}
       </div>
 
       <p className="foto-info-legenda">
@@ -48,5 +49,15 @@ export default ({ id, loginUsuario, comentario, likers: initLikers, comentarios 
         }
       </ul>
     </div>
+  );
+};
+
+const UserLinkWrapper = ({ login, hasNext }) => {
+  return (
+    <span>
+      <UserLink toUser={login} />
+      {hasNext && ','}
+      {' '}
+    </span>
   );
 };
