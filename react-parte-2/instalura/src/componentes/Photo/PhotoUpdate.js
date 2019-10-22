@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { store } from '../../security/TokenStore';
+import PubSub from 'pubsub-js';
 
-export default ({ id, likeada }) => {
-  const [liked, setLiked] = useState(likeada);
+export default ({ id, likeada: initLiked }) => {
+  const [liked, setLiked] = useState(initLiked);
   const classLike = liked ? 'fotoAtualizacoes-like-ativo' : 'fotoAtualizacoes-like';
 
   const doLike = event => {
@@ -23,7 +24,11 @@ export default ({ id, likeada }) => {
           throw new Error('Não foi possível curtir a foto');
         }
       })
-      .then(_ => setLiked(!liked))
+      .then(liker => {
+        setLiked(!liked);
+
+        PubSub.publish('photo.liked', { photoId: id, liker });
+      })
       .catch(err => alert(err.message));
   }
 
