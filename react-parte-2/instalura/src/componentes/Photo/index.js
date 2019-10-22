@@ -8,6 +8,6 @@ export default ({ data }) => (
     <PhotoHeader {...data} />
     <img alt="foto" className="foto-src" src={data.urlFoto} />
     <PhotoInfo {...data} />
-    <PhotoUpdate />
+    <PhotoUpdate {...data} />
   </div>
 );
