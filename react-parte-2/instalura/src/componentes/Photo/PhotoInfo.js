@@ -4,9 +4,10 @@ import PubSub from 'pubsub-js';
 
 export default ({ id, loginUsuario, comentario, likers: initLikers, comentarios }) => {
   const [likers, setLikers] = useState(initLikers || []);
+  const [comments, setComments] = useState(comentarios || []);
 
   useEffect(() => {
-    const subToken = PubSub.subscribe('photo.liked', (topic, { photoId, liker: newLiker }) => {
+    const subTokenLiked = PubSub.subscribe('photo.liked', (_, { photoId, liker: newLiker }) => {
       if (photoId === id) {
         const withoutCurrent = likers.filter(({ login }) => login !== newLiker.login);
 
@@ -18,7 +19,13 @@ export default ({ id, loginUsuario, comentario, likers: initLikers, comentarios 
       }
     });
 
-    return () => PubSub.unsubscribe(subToken);
+    const subTokenCommented = PubSub.subscribe('photo.commented', (_, { photoId, newComment }) => {
+      if (photoId === id) {
+        setComments([...comments, newComment]);
+      }
+    });
+
+    return () => [subTokenLiked, subTokenCommented].forEach(PubSub.unsubscribe);
   });
 
   return (
@@ -40,7 +47,7 @@ export default ({ id, loginUsuario, comentario, likers: initLikers, comentarios 
 
       <ul className="foto-info-comentarios">
         {
-          comentarios.map(comentario =>
+          comments.map(comentario =>
             <li className="comentario" key={`foto_${id}_comentario_${comentario.id}`}>
               <UserLink toUser={comentario.login} className="foto-info-autor" />
               {comentario.texto}
