@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import Photo from '../componentes/Photo';
 import { store } from '../security/TokenStore';
+import PubSub from 'pubsub-js';
 
 export default ({ user }) => {
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
-    const authParam = `X-AUTH-TOKEN=${store.getValue()}`;
-    let timelineUrl = 'http://localhost:8080/api/fotos';
+    const fetchMyTimeline = () => {
+      const authParam = `X-AUTH-TOKEN=${store.getValue()}`;
+      let timelineUrl = 'http://localhost:8080/api/fotos';
 
-    if (user !== undefined) {
-      timelineUrl = `http://localhost:8080/api/public/fotos/${user}`;
-    }
+      if (user !== undefined) {
+        timelineUrl = `http://localhost:8080/api/public/fotos/${user}`;
+      }
 
-    fetch(`${timelineUrl}?${authParam}`)
-      .then(resp => resp.json())
-      .then(setPhotos);
+      fetch(`${timelineUrl}?${authParam}`)
+        .then(resp => resp.json())
+        .then(setPhotos);
+    };
+
+    fetchMyTimeline();
+
+    const tokenFound = PubSub.subscribe('timeline.search.found', (_, foundPhotos) => setPhotos(foundPhotos));
+    const tokenNotFound = PubSub.subscribe('timeline.search.not-found', fetchMyTimeline);
+
+    return () => [tokenFound, tokenNotFound].forEach(PubSub.unsubscribe);
   }, [user]);
 
   return (
