@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Photo from '../componentes/Photo';
 import { store } from '../security/TokenStore';
 import PubSub from 'pubsub-js';
+import { CSSTransition } from 'react-transition-group'
 
 export default ({ user }) => {
   const [photos, setPhotos] = useState([]);
@@ -30,11 +31,15 @@ export default ({ user }) => {
 
   return (
     <div className="fotos container">
-      {
-        photos.map(p =>
-          (<Photo key={p.id} data={p}></Photo>)
-        )
-      }
+      <CSSTransition in={photos} timeout={200} classNames="timeline">
+        <div>
+        {
+          photos.map(p =>
+            (<Photo key={p.id} data={p}></Photo>)
+          )
+        }
+        </div>
+      </CSSTransition>
     </div>
   );
 }

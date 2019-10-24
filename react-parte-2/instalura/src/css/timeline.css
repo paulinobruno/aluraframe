@@ -223,3 +223,21 @@ body {
   color: #fff;
   height: 2.4em;
 }
+
+.timeline-enter {
+    opacity: 0.01;
+}
+
+.timeline-enter-active {
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+}
+
+.timeline-exit {
+    opacity: 1;
+}
+
+.timeline-exit-active {
+    opacity: 0.01;
+    transition: opacity 200ms ease-in;
+}
