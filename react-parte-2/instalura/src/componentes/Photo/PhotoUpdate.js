@@ -1,61 +1,17 @@
-import React, { useState, useRef } from 'react';
-import { store } from '../../security/TokenStore';
-import PubSub from 'pubsub-js';
+import React, { useRef } from 'react';
 
-const defaultHeaders = { 'X-AUTH-TOKEN': store.getValue() };
-const handleResponse = nonOkMessage =>
-  resp => {
-    if (resp.ok) {
-      return resp.json();
-    } else {
-      throw new Error(nonOkMessage);
-    }
-  };
-
-export default ({ id, likeada: initLiked }) => {
+export default ({ likeada, handleLike, handleComment }) => {
   const comment = useRef();
-  const [liked, setLiked] = useState(initLiked);
-  const classLike = liked ? 'fotoAtualizacoes-like-ativo' : 'fotoAtualizacoes-like';
+  const classLike = likeada ? 'fotoAtualizacoes-like-ativo' : 'fotoAtualizacoes-like';
 
   const doLike = event => {
     event.preventDefault();
-
-    const options = {
-      method: 'POST',
-      headers: { ...defaultHeaders }
-    };
-
-    fetch(`http://localhost:8080/api/fotos/${id}/like`, options)
-      .then(handleResponse('Não foi possível curtir a foto'))
-      .then(liker => {
-        setLiked(!liked);
-
-        PubSub.publish('photo.liked', { photoId: id, liker });
-      })
-      .catch(err => alert(err.message));
+    handleLike();
   };
 
   const doComment = event => {
     event.preventDefault();
-
-    const options = {
-      method: 'POST',
-      body: JSON.stringify({
-        texto: comment.current.value
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...defaultHeaders
-      }
-    };
-
-    fetch(`http://localhost:8080/api/fotos/${id}/comment`, options)
-      .then(handleResponse('Não foi possível comentar'))
-      .then(newComment => {
-        PubSub.publish('photo.commented', { photoId: id, newComment });
-        comment.current.value = '';
-      })
-      .catch(err => alert(err.message));
+    handleComment(comment.current.value, () => comment.current.value = '');
   };
 
   return (

@@ -23,21 +23,21 @@ export default ({ user }) => {
 
     fetchMyTimeline();
 
-    const tokenFound = PubSub.subscribe('timeline.search.found', (_, foundPhotos) => setPhotos(foundPhotos));
-    const tokenNotFound = PubSub.subscribe('timeline.search.not-found', fetchMyTimeline);
+    const subs = [
+      PubSub.subscribe('timeline.search.found', (_, foundPhotos) => setPhotos(foundPhotos)),
+      PubSub.subscribe('timeline.search.not-found', fetchMyTimeline),
+    ];
 
-    return () => [tokenFound, tokenNotFound].forEach(PubSub.unsubscribe);
-  }, [user]);
+    return () => subs.forEach(PubSub.unsubscribe);
+  }, [user, photos]);
 
   return (
     <div className="fotos container">
-      <CSSTransition in={photos} timeout={200} classNames="timeline">
+      <CSSTransition in={true} timeout={200} classNames="timeline">
         <div>
-        {
-          photos.map(p =>
-            (<Photo key={p.id} data={p}></Photo>)
-          )
-        }
+          {
+            photos.map(p => (<Photo key={p.id} data={p} />))
+          }
         </div>
       </CSSTransition>
     </div>
