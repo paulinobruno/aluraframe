@@ -4,6 +4,25 @@ import { store } from '../security/TokenStore';
 import PubSub from 'pubsub-js';
 import { CSSTransition } from 'react-transition-group'
 
+/*
+ *
+ *
+ *
+ *
+ *      Criar TimelineOps
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 export default ({ user }) => {
   const [photos, setPhotos] = useState([]);
 
