@@ -12,8 +12,8 @@ const handleResponse = nonOkMessage =>
   };
 
 export default class PhotoOps {
-  constructor(photoId) {
-    this.photoId = photoId;
+  constructor(photo) {
+    this.photo = photo;
 
     this.likePhoto = this.likePhoto.bind(this);
     this.commentPhoto = this.commentPhoto.bind(this);
@@ -25,10 +25,19 @@ export default class PhotoOps {
       headers: { ...defaultHeaders }
     };
 
-    fetch(`http://localhost:8080/api/fotos/${this.photoId}/like`, options)
+    fetch(`http://localhost:8080/api/fotos/${this.photo.id}/like`, options)
       .then(handleResponse('Não foi possível curtir a foto'))
-      .then(liker => {
-        PubSub.publish('photo.liked', { photoId: this.photoId, liker });
+      .then(newLiker => {
+        const withoutCurrent = this.photo.likers.filter(({ login }) => login !== newLiker.login);
+
+        if (withoutCurrent.length === this.photo.likers.length) {
+          this.photo.likers = [...this.photo.likers, newLiker];
+        } else {
+          this.photo.likers = withoutCurrent;
+        }
+
+        this.photo.likeada = !this.photo.likeada;
+        PubSub.publish('photo.updated', this.photo);
       })
       .catch(err => alert(err.message));
   }
@@ -43,12 +52,26 @@ export default class PhotoOps {
       }
     };
 
-    fetch(`http://localhost:8080/api/fotos/${this.photoId}/comment`, options)
+    fetch(`http://localhost:8080/api/fotos/${this.photo.id}/comment`, options)
       .then(handleResponse('Não foi possível comentar'))
       .then(newComment => {
-        PubSub.publish('photo.commented', { photoId: this.photoId, newComment });
+        this.photo.comentarios = [...this.photo.comentarios, newComment];
+        PubSub.publish('photo.updated', this.photo);
+
         onSuccess && onSuccess();
       })
       .catch(err => alert(err.message));
+  }
+
+  subscribeToUpdates(photoId, callback) {
+    return PubSub.subscribe('photo.updated', (_, updatedPhoto) => {
+      if (photoId === updatedPhoto.id) {
+        callback(updatedPhoto);
+      }
+    });
+  }
+
+  unsubscribeFromUpdates(subscriberId) {
+    PubSub.unsubscribe(subscriberId);
   }
 }

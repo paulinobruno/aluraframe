@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PubSub from 'pubsub-js';
 import PhotoOps from './PhotoOps';
 import PhotoHeader from './PhotoHeader';
 import PhotoInfo from './PhotoInfo';
@@ -7,34 +6,13 @@ import PhotoUpdate from './PhotoUpdate';
 
 export default ({ data }) => {
   const [photo, setPhoto] = useState(data);
-  const ops = new PhotoOps(photo.id);
+  const ops = new PhotoOps(photo);
 
   useEffect(() => {
-    const subs = [
-      PubSub.subscribe('photo.liked', (_, { photoId, liker: newLiker }) => {
-        if (photo.id === photoId) {
-          const withoutCurrent = photo.likers.filter(({ login }) => login !== newLiker.login);
+    const subscriberId = ops.subscribeToUpdates(photo.id, setPhoto);
 
-          if (withoutCurrent.length === photo.likers.length) {
-            photo.likers = [...photo.likers, newLiker];
-          } else {
-            photo.likers = withoutCurrent;
-          }
-
-          photo.likeada = !photo.likeada;
-          setPhoto(photo);
-        }
-      }),
-      PubSub.subscribe('photo.commented', (_, { photoId, newComment }) => {
-        if (photo.id === photoId) {
-          photo.comentarios = [...photo.comentarios, newComment];
-          setPhoto(photo);
-        }
-      }),
-    ];
-
-    return () => subs.forEach(PubSub.unsubscribe);
-  });
+    return () => ops.unsubscribeFromUpdates(subscriberId);
+  }, [photo.id, ops, setPhoto]);
 
   return (
     <div className="foto">
