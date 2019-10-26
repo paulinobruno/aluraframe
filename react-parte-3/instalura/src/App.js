@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { createStore } from 'redux';
 import Header from './componentes/Header';
 import Timeline from './componentes/Timeline';
-import LogicaStore from './logicas/LogicaStore';
+import { timeline } from './reducers/timeline';
 
-const store = new LogicaStore([]);
+const store = createStore(timeline);
+
 class App extends Component {
   render() {
     return (

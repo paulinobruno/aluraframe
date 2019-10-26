@@ -1,6 +1,6 @@
 import Pubsub from 'pubsub-js';
 
-export default class LogicaStore {
+export default class TimelineApi {
   constructor(fotos) {
     this.fotos = fotos;
   }
@@ -54,12 +54,11 @@ export default class LogicaStore {
       });
   }
 
-  lista(urlPerfil) {
+  static lista(store, urlPerfil) {
     fetch(urlPerfil)
       .then(response => response.json())
       .then(fotos => {
-        this.fotos = fotos;
-        Pubsub.publish('timeline', this.fotos);
+        store.dispatch({ fotos, type: 'LISTAGEM' });
       });
   }
 
