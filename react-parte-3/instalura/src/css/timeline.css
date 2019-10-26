@@ -1,6 +1,11 @@
+html,body {
+  height: 100%;
+}
+
 body {
   padding-top: 7vh;
   background: #fafafa;
+  position: relative;
 }
 
 
@@ -25,7 +30,7 @@ body {
 }
 
 .header-logo {
-  background: url(../images/logo-instalura.svg) no-repeat left;
+  background: url(../imgs/logo-instalura.svg) no-repeat left;
   height: 1em;
   padding-left: 1.5em;
   padding-bottom: .2em;
@@ -53,7 +58,7 @@ body {
 
 .header-busca-submit {
   border: 0;
-  background: url(../images/busca-icone.png) center center no-repeat #069;
+  background: url(../imgs/busca-icone.png) center center no-repeat #069;
   text-indent: -9999px;
   overflow: hidden;
   background-size: 20px;
@@ -75,8 +80,7 @@ body {
   text-decoration: none;
   color: #069;
   font-size: 3em;
-  margin: auto 2pt;
-}
+}    
 
 .header-nav-item a:hover{
   color: #5ad4c9;
@@ -91,7 +95,7 @@ body {
   border-radius: 3px;
   max-width: 550px;
   margin: 2em auto;
-
+  
 }
 
 .foto-header {
@@ -152,10 +156,7 @@ body {
 }
 
 .foto-info-autor {
-  text-decoration: none;
-  color: #069;
   font-weight: bold;
-  margin-right: 0.5em;
 }
 
 
@@ -180,7 +181,7 @@ body {
 }
 
 .fotoAtualizacoes-like {
-  background: url(../images/s2.png) no-repeat center center;
+  background: url(../imgs/s2.png) no-repeat center center;
   background-size: 32px 32px;
   width: 44px;
   height: 44px;
@@ -190,19 +191,15 @@ body {
   margin-right: 1em;
 }
 
-.fotoAtualizacoes-like:hover {
-  background-image: url(../images/s2-check.png)
-}
-
 .fotoAtualizacoes-like-ativo {
-    background: url(../images/s2-check.png) no-repeat center center;
-    background-size: 32px 32px;
-    width: 44px;
-    height: 44px;
-    text-indent: -9999px;
-    display: inline-block;
-    transition: .4s;
-    margin-right: 1em;
+  background: url(../imgs/s2-check.png) no-repeat center center;
+  background-size: 32px 32px;
+  width: 44px;
+  height: 44px;
+  text-indent: -9999px;
+  display: inline-block;
+  transition: .4s;
+  margin-right: 1em;
 }
 
 .fotoAtualizacoes-form {
@@ -225,19 +222,19 @@ body {
 }
 
 .timeline-enter {
-    opacity: 0.01;
+  opacity: 0.01;
 }
 
-.timeline-enter-active {
-    opacity: 1;
-    transition: opacity 200ms ease-in;
+.timeline-enter.timeline-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
 }
 
-.timeline-exit {
-    opacity: 1;
+.timeline-leave {
+  opacity: 1;
 }
 
-.timeline-exit-active {
-    opacity: 0.01;
-    transition: opacity 200ms ease-in;
-}
+.timeline-leave.timeline-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}      
