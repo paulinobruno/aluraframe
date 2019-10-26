@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import Header from './componentes/Header';
 import Timeline from './componentes/Timeline';
+import LogicaStore from './logicas/LogicaStore';
 
+const store = new LogicaStore([]);
 class App extends Component {
-  render() {    
+  render() {
     return (
-    <div id="root">
-      <div className="main">
-        <Header/>
-        <Timeline login={this.props.params.login}/>
+      <div id="root">
+        <div className="main">
+          <Header />
+          <Timeline login={this.props.params.login} store={store} />
+        </div>
       </div>
-    </div>
     );
   }
 }
