@@ -54,12 +54,15 @@ export default class TimelineApi {
       });
   }
 
-  static lista(store, urlPerfil) {
-    fetch(urlPerfil)
-      .then(response => response.json())
-      .then(fotos => {
-        store.dispatch({ fotos, type: 'LISTAGEM' });
-      });
+  static lista(urlPerfil) {
+    return dispatch =>
+      fetch(urlPerfil)
+        .then(response => response.json())
+        .then(fotos => {
+          dispatch({ fotos, type: 'LISTAGEM' });
+
+          return fotos;
+        });
   }
 
   subscribe(callback) {
