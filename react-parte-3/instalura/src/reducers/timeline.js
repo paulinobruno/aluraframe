@@ -1,5 +1,14 @@
 import { List } from 'immutable';
 
+function trocaFoto(fotos, fotoId, fnNovasProps) {
+  const fotoAchada = fotos.find(foto => foto.id === fotoId);
+  const novasProps = fnNovasProps(fotoAchada);
+  const novaFoto = { ...fotoAchada, ...novasProps };
+  const currIndex = fotos.findIndex(foto => foto.id === fotoId);
+
+  return fotos.set(currIndex, novaFoto);
+}
+
 export const timeline = (state = new List(), action) => {
   if (action.type === 'LISTAGEM') {
     return new List(action.fotos);
@@ -8,30 +17,24 @@ export const timeline = (state = new List(), action) => {
   if (action.type === 'COMENTARIO') {
     const { fotoId, novoComentario } = action;
 
-    const fotoAchada = state.find(foto => foto.id === fotoId);
-    const novosComentarios = [...fotoAchada.comentarios, novoComentario];
-    const novaFoto = { ...fotoAchada, comentarios: novosComentarios };
-    const currIndex = state.findIndex(foto => foto.id === fotoId);
-
-
-    return state.set(currIndex, novaFoto);
+    return trocaFoto(state, fotoId, fotoAchada => (
+      { comentarios: [ ...fotoAchada.comentarios, novoComentario ] }
+    ));
   }
 
   if (action.type === 'LIKE') {
     const { fotoId, liker } = action;
-    const fotoAchada = state.find(foto => foto.id === fotoId);
-    fotoAchada.likeada = !fotoAchada.likeada;
 
-    const possivelLiker = fotoAchada.likers.find(likerAtual => likerAtual.login === liker.login);
+    return trocaFoto(state, fotoId, fotoAchada => {
+      const likeada = !fotoAchada.likeada;
 
-    if (possivelLiker === undefined) {
-      fotoAchada.likers.push(liker);
-    } else {
-      const novosLikers = fotoAchada.likers.filter(likerAtual => likerAtual.login !== liker.login);
-      fotoAchada.likers = novosLikers;
-    }
+      let likers = fotoAchada.likers.filter(likerAtual => likerAtual.login !== liker.login);
+      if (likers.length === fotoAchada.likers.length) {
+        likers = [ ...likers, liker ];
+      }
 
-    return state;
+      return { likeada, likers };
+    });
   }
 
   return state;
