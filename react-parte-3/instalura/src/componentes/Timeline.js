@@ -13,7 +13,7 @@ export default class Timeline extends Component {
 
   componentWillMount() {
     this.props.store.subscribe(() => {
-      const fotos = this.props.store.getState();
+      const fotos = this.props.store.getState().timeline;
       this.setState({ fotos })
     });
   }
