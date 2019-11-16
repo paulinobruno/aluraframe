@@ -30,7 +30,8 @@
     "test": "gulp check",
     "coverage": "gulp check",
     "prod": "echo 'Starting standalone server in PROD mode'; node .",
-    "heroku-postbuild": "gulp build"
+    "heroku-postbuild": "gulp build",
+    "server": "./server/start-server.zsh"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
