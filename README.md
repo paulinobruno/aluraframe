@@ -6,4 +6,5 @@ Referente aos cursos abaixo da plataforma Alura:
 - https://cursos.alura.com.br/course/webpack
 - https://cursos.alura.com.br/course/react
 - https://cursos.alura.com.br/course/react-parte-2
+- https://cursos.alura.com.br/course/react-parte-3
 
